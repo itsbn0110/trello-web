@@ -13,12 +13,12 @@ import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 
 const CHIP_STYLES = {
   borderRadius: '4px',
-  border: 'nonb',
-  bgcolor: '#fff',
-  color: 'primary.main',
+  border: 'none',
+  bgcolor: 'transparent',
+  color: 'white',
   paddingX: '5px',
-  '& .MuiSvgIcon-root': {
-    color: 'primary.main'
+  '.MuiSvgIcon-root': {
+    color: 'white'
   },
   '&:hover': {
     bgColor: 'primary.50'
@@ -35,8 +35,9 @@ function BoardBar() {
         justifyContent: 'space-between',
         gap: 2,
         overflow: 'auto',
-        borderTop: '1px solid #00bfa5',
-        paddingX: 2
+        borderBottom: '1px solid white',
+        paddingX: 2,
+        bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2')
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
@@ -48,10 +49,22 @@ function BoardBar() {
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
-        <Button variant="outlined" startIcon={<PersonAddAlt1Icon />}>
-          Invite
+        <Button
+          variant="outlined"
+          startIcon={<PersonAddAlt1Icon sx={{ width: '18px', height: '20px' }} />}
+          sx={{
+            color: 'white',
+            borderColor: 'white',
+            '&:hover': { borderColor: 'white' }
+          }}
+        >
+          Share
         </Button>
-        <AvatarGroup max={7} total={10} sx={{ '& .MuiAvatar-root': { width: 34, height: 34, fontSize: 16 } }}>
+        <AvatarGroup
+          max={7}
+          total={10}
+          sx={{ gap: '10px', '& .MuiAvatar-root': { width: 36, height: 36, fontSize: 16, border: 'none' } }}
+        >
           <Tooltip title="HoaXu">
             <Avatar
               alt="HoaXu"

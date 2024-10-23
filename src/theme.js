@@ -1,5 +1,5 @@
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles';
-import { blue, orange, teal, yellow } from '@mui/material/colors';
+// import { blue, orange, teal, yellow } from '@mui/material/colors';
 
 // Create a theme instance.
 const theme = extendTheme({
@@ -8,18 +8,8 @@ const theme = extendTheme({
     boardBarHeight: '60px'
   },
   colorSchemes: {
-    light: {
-      palette: {
-        primary: teal,
-        secondary: orange
-      }
-    },
-    dark: {
-      palette: {
-        primary: yellow,
-        secondary: blue
-      }
-    }
+    light: {},
+    dark: {}
   },
   components: {
     MuiCssBaseline: {
@@ -34,7 +24,7 @@ const theme = extendTheme({
             borderRadius: '4px'
           },
           '*::-webkit-scrollbar-thumb:hover': {
-            backgroundColor: '#636e72'
+            backgroundColor: 'white'
           }
         }
       }
@@ -42,35 +32,36 @@ const theme = extendTheme({
     MuiButton: {
       styleOverrides: {
         root: {
-          textTransform: 'none'
+          textTransform: 'none',
+          borderWidth: '0.5px',
+          '&:hover': { borderWidth: '0.5px' }
         }
       }
     },
     MuiInputLabel: {
       styleOverrides: {
-        root: ({ theme }) => ({
-          color: theme.palette.primary.main,
+        root: {
           fontSize: '0.875rem'
-        })
+        }
       }
     },
     MuiOutlinedInput: {
       styleOverrides: {
-        root: ({ theme }) => ({
-          color: theme.palette.primary.main,
+        root: {
           fontSize: '0.875rem',
-          '.MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.primary.light
-          },
-          '&:hover': {
-            '.MuiOutlinedInput-notchedOutline': {
-              borderColor: theme.palette.primary.main
-            }
-          },
           '& fieldset': {
+            borderWidth: '0.5px !important',
+            transition: 'transform 0.2s ease-in-out, border-width 0.2s ease-in-out'
+          },
+          '&:hover fieldset': {
+            transform: 'scale(1.05)', // Tạo cảm giác phóng to nhẹ
+            borderWidth: '1px !important'
+          },
+          '&.Mui-focused fieldset': {
+            transform: 'scale(1.05)',
             borderWidth: '1px !important'
           }
-        })
+        }
       }
     }
   }
