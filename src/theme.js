@@ -1,5 +1,5 @@
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles';
-import { blue, orange, teal } from '@mui/material/colors';
+import { blue, orange, red, teal, yellow } from '@mui/material/colors';
 
 // Create a theme instance.
 const theme = extendTheme({
@@ -16,12 +16,29 @@ const theme = extendTheme({
     },
     dark: {
       palette: {
-        primary: blue,
+        primary: yellow,
         secondary: blue
       }
     }
   },
   components: {
+    MuiCssBaseline: {
+      styleOverrides: {
+        body: {
+          '*::-webkit-scrollbar': {
+            width: '8px',
+            height: '8px'
+          },
+          '*::-webkit-scrollbar-thumb': {
+            backgroundColor: '#bdc3c7',
+            borderRadius: '4px'
+          },
+          '*::-webkit-scrollbar-thumb:hover': {
+            backgroundColor: '#636e72'
+          }
+        }
+      }
+    },
     MuiButton: {
       styleOverrides: {
         root: {
