@@ -31,9 +31,12 @@ function AppBar() {
         alignItems: 'center',
         justifyContent: 'space-between',
         gap: 2,
-        overflow: 'auto',
         paddingX: 2,
-        bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0')
+        bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#2c3e50' : '#1565c0'),
+        overflow: 'auto',
+        '&::-webkit-scrollbar-track': {
+          m: 2
+        }
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
@@ -49,11 +52,7 @@ function AppBar() {
           <Recent />
           <Starred />
           <Templates />
-          <Button
-            variant="outlined"
-            startIcon={<LibraryAddIcon />}
-            sx={{ color: 'white', border: 'none', '&:hover': { border: 'none' } }}
-          >
+          <Button variant="outlined" startIcon={<LibraryAddIcon />} sx={{ color: 'white', border: 'none', '&:hover': { border: 'none' } }}>
             Create
           </Button>
         </Box>
@@ -74,13 +73,7 @@ function AppBar() {
                 <SearchIcon sx={{ color: 'white' }} />
               </InputAdornment>
             ),
-            endAdornment: searchValue && (
-              <CloseIcon
-                sx={{ color: 'white', cursor: 'pointer' }}
-                fontSize="small"
-                onClick={() => setSearchValue('')}
-              />
-            )
+            endAdornment: searchValue && <CloseIcon sx={{ color: 'white', cursor: 'pointer' }} fontSize="small" onClick={() => setSearchValue('')} />
           }}
           sx={{
             minWidth: '120px',
