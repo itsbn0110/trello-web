@@ -34,7 +34,6 @@ function BoardBar() {
         alignItems: 'center',
         justifyContent: 'space-between',
         gap: 2,
-        borderBottom: '1px solid white',
         paddingX: 2,
         bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'),
         overflow: 'auto',
