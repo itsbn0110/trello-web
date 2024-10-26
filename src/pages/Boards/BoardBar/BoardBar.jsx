@@ -10,7 +10,7 @@ import AvatarGroup from '@mui/material/AvatarGroup';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-
+import { capitalizeFirstLetter } from '~/utils/formatter';
 const CHIP_STYLES = {
   borderRadius: '4px',
   border: 'none',
@@ -24,7 +24,7 @@ const CHIP_STYLES = {
     bgColor: 'primary.50'
   }
 };
-function BoardBar() {
+function BoardBar({ board }) {
   return (
     <Box
       sx={{
@@ -43,8 +43,8 @@ function BoardBar() {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
-        <Chip icon={<DashboardIcon />} label="BaoNgoDev Board" sx={CHIP_STYLES} clickable />
-        <Chip icon={<VpnLockIcon />} label="Public/Private Workspace" sx={CHIP_STYLES} clickable />
+        <Chip icon={<DashboardIcon />} label={board?.title} sx={CHIP_STYLES} clickable />
+        <Chip icon={<VpnLockIcon />} label={capitalizeFirstLetter(board?.type)} sx={CHIP_STYLES} clickable />
         <Chip icon={<AddToDriveIcon />} label="Add to Google Drive" sx={CHIP_STYLES} clickable />
         <Chip icon={<BoltIcon />} label="Automation" sx={CHIP_STYLES} clickable />
         <Chip icon={<FilterListIcon />} label="Filters" sx={CHIP_STYLES} clickable />
