@@ -27,10 +27,11 @@ function BoardContent({ board }) {
 
   const [orderedColumns, setOrderedColumns] = useState([]);
   // At the same time, there is only one element is being dragged (column or card)
-  const [activeDragItemId, setActiveDragItemId] = useState(null);
-  const [activeDragItemType, setActiveDragItemType] = useState(null);
-  const [activeDragItemData, setActiveDragItemData] = useState(null);
-
+  const [activeDragItem, setActiveDragItem] = useState({
+    id: null,
+    type: null,
+    data: null
+  });
   useEffect(() => {
     setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'));
   }, [board]);
@@ -52,17 +53,23 @@ function BoardContent({ board }) {
 
       // update state columns after drag and drop
       setOrderedColumns(dndOrderedColumns);
-      setActiveDragItemId(null);
-      setActiveDragItemType(null);
-      setActiveDragItemData(null);
+      setActiveDragItem({
+        id: null,
+        type: null,
+        data: null
+      });
     }
   };
 
   const handleDragStart = (event) => {
     console.log(event);
-    setActiveDragItemId(event?.active?.id);
-    setActiveDragItemType(event?.active?.data?.current?.columnId ? ACTIVE_DRAG_ITEM_TYPE.CARD : ACTIVE_DRAG_ITEM_TYPE.COLUMN);
-    setActiveDragItemData(event?.active?.data?.current);
+    const itemType = event?.active?.data?.current?.columnId ? ACTIVE_DRAG_ITEM_TYPE.CARD : ACTIVE_DRAG_ITEM_TYPE.COLUMN;
+    console.log(itemType);
+    setActiveDragItem({
+      id: event?.active?.id,
+      type: itemType,
+      data: event?.active?.data?.current
+    });
   };
 
   // console.log('activeDragItemId', activeDragItemId);
@@ -87,9 +94,9 @@ function BoardContent({ board }) {
       >
         <ListColumns columns={orderedColumns} />
         <DragOverlay dropAnimation={dropAnimation}>
-          {!activeDragItemType && null}
-          {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && <Column column={activeDragItemData} />}
-          {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && <Card card={activeDragItemData} />}
+          {!activeDragItem.type && null}
+          {activeDragItem.type === ACTIVE_DRAG_ITEM_TYPE.COLUMN && <Column column={activeDragItem.data} />}
+          {activeDragItem.type === ACTIVE_DRAG_ITEM_TYPE.CARD && <Card card={activeDragItem.data} />}
         </DragOverlay>
       </Box>
     </DndContext>
