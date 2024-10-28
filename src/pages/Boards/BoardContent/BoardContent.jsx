@@ -4,8 +4,10 @@ import ListColumns from './ListColumns/ListColumns';
 import { DndContext, useSensor, useSensors, MouseSensor, TouchSensor, DragOverlay, defaultDropAnimationSideEffects } from '@dnd-kit/core';
 import { mapOrder } from '~/utils/sorts';
 import { arrayMove } from '@dnd-kit/sortable';
+import { cloneDeep } from 'lodash';
 import Column from './ListColumns/Column/Column';
 import Card from './ListColumns/Column/Listcards/Card/Card';
+
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
@@ -35,10 +37,84 @@ function BoardContent({ board }) {
   useEffect(() => {
     setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'));
   }, [board]);
+
+  const findColumnByCardId = (cardId) => {
+    return orderedColumns.find((column) => column.cards.map((card) => card._id)?.includes(cardId));
+  };
+
+  const handleDragOver = (event) => {
+    if (activeDragItem.type === ACTIVE_DRAG_ITEM_TYPE.COLUMN) return;
+
+    // console.log('handleDragOver: ', event);
+
+    const { active, over } = event;
+    if (!active || !over) return;
+
+    // activeDraggingCard is the card is being drag
+    const {
+      id: activeDraggingCardId,
+      data: { current: activeDraggingCardData }
+    } = active;
+
+    // overCard is the card that activeDraggingCard is dragging over
+    const { id: overCardId } = over;
+
+    // find 2 columns by cardID
+    const activeColumn = findColumnByCardId(activeDraggingCardId);
+    const overColumn = findColumnByCardId(overCardId);
+
+    // if not exsists 1 in 2 columns, do nothing, avoid crashing web
+    if (!activeColumn || !overColumn) return;
+
+    // handle logic when drag column over 2 different columns,
+    // if drag card within 1 column , do nothing!
+    // this is a handler when (handleDragOVer),
+    // and handling when completely drag is another problem in (handleDragEnd)
+    if (activeColumn._id !== overColumn._id) {
+      setOrderedColumns((prevColumns) => {
+        const overCardIndex = overColumn?.cards?.findIndex((card) => card._id === overCardId);
+        let newCardIndex;
+        const isBelowOverItem = active.rect.current.translated && active.rect.current.translated.top > over.rect.top + over.rect.height;
+
+        const modifier = isBelowOverItem ? 1 : 0;
+
+        newCardIndex = over >= 0 ? overCardIndex + modifier : overColumn?.cards?.length + 1;
+        const nextColumns = cloneDeep(prevColumns);
+        const nextActiveColumn = nextColumns.find((column) => column._id === activeColumn._id);
+        const nextOverColumn = nextColumns.find((column) => column._id === overColumn._id);
+
+        if (nextActiveColumn) {
+          // Delete card in active column
+          nextActiveColumn.cards = nextActiveColumn.cards.filter((card) => card._id !== activeDraggingCardId);
+
+          // Update cardOrderIds array
+          nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map((card) => card._id);
+        }
+
+        if (nextOverColumn) {
+          // Check card is being drag whether exists in overColumn? , if exsist, need to delete first
+          nextOverColumn.cards = nextOverColumn.cards.filter((card) => card._id !== activeDraggingCardId);
+
+          // Next step, add dragging card to overColumn into new index position
+          nextOverColumn.cards = nextOverColumn.cards.toSpliced(newCardIndex, 0, activeDraggingCardData);
+
+          nextOverColumn.cardOrderIds = nextOverColumn.cards.map((card) => card._id);
+        }
+        return nextColumns;
+      });
+    }
+  };
+
   const handleDragEnd = (event) => {
     // console.log('hanldeDragEnd', event);
+
+    if (activeDragItem.type === ACTIVE_DRAG_ITEM_TYPE.CARD) {
+      return;
+    }
     const { active, over } = event;
-    if (!over) return;
+
+    if (!active || !over) return;
+
     if (active.id !== over.id) {
       // take the old position (from active obj)
       const oldIndex = orderedColumns.findIndex((c) => c._id === active.id);
@@ -62,9 +138,8 @@ function BoardContent({ board }) {
   };
 
   const handleDragStart = (event) => {
-    console.log(event);
+    // console.log(event);
     const itemType = event?.active?.data?.current?.columnId ? ACTIVE_DRAG_ITEM_TYPE.CARD : ACTIVE_DRAG_ITEM_TYPE.COLUMN;
-    console.log(itemType);
     setActiveDragItem({
       id: event?.active?.id,
       type: itemType,
@@ -82,7 +157,7 @@ function BoardContent({ board }) {
   };
 
   return (
-    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
       <Box
         sx={{
           display: 'flex',

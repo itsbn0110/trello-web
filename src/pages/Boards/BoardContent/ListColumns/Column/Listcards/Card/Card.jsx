@@ -20,7 +20,8 @@ function Card({ card }) {
     // if use CSS.transform will be bug like 'stretch'
     transform: CSS.Translate.toString(transform),
     transition,
-    opacity: isDragging ? 0.5 : undefined
+    opacity: isDragging ? 0.5 : undefined,
+    border: isDragging ? '1px solid #2ecc71' : undefined
   };
   const shouldShowCardAction = () => {
     return card?.memberIds?.length || card?.comments?.length || card?.attachments?.length;
