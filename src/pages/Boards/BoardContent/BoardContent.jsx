@@ -1,12 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import ListColumns from './ListColumns/ListColumns';
-import { DndContext, useSensor, useSensors, MouseSensor, TouchSensor, DragOverlay, defaultDropAnimationSideEffects, closestCorners } from '@dnd-kit/core';
+import { DndContext, useSensor, useSensors, MouseSensor, TouchSensor, DragOverlay, defaultDropAnimationSideEffects, closestCorners, pointerWithin, rectIntersection, getFirstCollision, closestCenter } from '@dnd-kit/core';
 import { mapOrder } from '~/utils/sorts';
 import { arrayMove } from '@dnd-kit/sortable';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, last } from 'lodash';
 import Column from './ListColumns/Column/Column';
 import Card from './ListColumns/Column/Listcards/Card/Card';
+import { SettingsOverscanSharp } from '@mui/icons-material';
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
@@ -36,6 +37,10 @@ function BoardContent({ board }) {
   });
 
   const [oldColumnWhenDraggingCard, setOldColumnWhenDraggingCard] = useState(null);
+
+  // The last collistion (handle collistion detection algorithm)
+  const lastOverId = useRef(null);
+
   useEffect(() => {
     setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'));
   }, [board]);
@@ -215,6 +220,38 @@ function BoardContent({ board }) {
     sideEffects: defaultDropAnimationSideEffects({ styles: { active: { opacity: '0.5' } } })
   };
 
+  const collisionDetectionStrategy = useCallback(
+    (args) => {
+      if (activeDragItem.type === ACTIVE_DRAG_ITEM_TYPE.COLUMN) {
+        return closestCorners({ ...args });
+      }
+
+      //Find intersections and collisions with the cursor - intersections with the cursor
+      const pointerIntersections = pointerWithin(args);
+      // Algorithm returns an collision array (collisions)
+      const intersections = !!pointerIntersections?.length ? pointerIntersections : rectIntersection(args);
+
+      // Find the first overId in above Intersections
+      let overId = getFirstCollision(intersections, 'id');
+
+      if (overId) {
+        const checkColumn = orderedColumns.find((column) => column._id === overId);
+
+        if (checkColumn) {
+          overId = closestCenter({
+            ...args,
+            droppableContainers: args.droppableContainers.filter((container) => container.id !== overId && checkColumn?.cardOrderIds?.includes(container.id))
+          })[0]?.id;
+        }
+        // If over is a column, it will find the closest cardId within the collision area. Based on the math algorithm, the closestCenter or closestCorner collision is fine. However, using closestCenter here is smoother
+        lastOverId.current = overId;
+        return [{ id: overId }];
+      }
+
+      return lastOverId.current ? [{ id: lastOverId.current }] : [];
+    },
+    [activeDragItem.type, orderedColumns]
+  );
   return (
     <DndContext
       sensors={sensors}
@@ -223,7 +260,10 @@ function BoardContent({ board }) {
       onDragEnd={handleDragEnd}
       // Collision detection algorithms
       // https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqa2V6ZGY4QWRveFZINmNITURMZnMtRC15WnBzZ3xBQ3Jtc0ttX3RhcDZhSGdpNkdEMEpXc3AtX1dyX0NVX00ydXRISkliZkdVd19JSDhuU1BHVEROVVdOVURBbFFHMlprVUVrYXhpa29mN2VBVmFseFROYnJubW1MNWpKX0hKMlNlWFNZLXhEeXBZZUVBSDFNQjlCbw&q=https%3A%2F%2Fdocs.dndkit.com%2Fapi-documentation%2Fcontext-provider%2Fcollision-detection-algorithms&v=vJumSLS6hOw
-      collisionDetection={closestCorners}
+      // collisionDetection={closestCorners}
+
+      // Flickering bug, custom collisionDetectionAlgorithm
+      collisionDetection={collisionDetectionStrategy}
     >
       <Box
         sx={{
