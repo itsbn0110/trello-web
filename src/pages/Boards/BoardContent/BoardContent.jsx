@@ -4,7 +4,8 @@ import ListColumns from './ListColumns/ListColumns';
 import { DndContext, useSensor, useSensors, MouseSensor, TouchSensor, DragOverlay, defaultDropAnimationSideEffects, closestCorners, pointerWithin, getFirstCollision } from '@dnd-kit/core';
 import { mapOrder } from '~/utils/sorts';
 import { arrayMove } from '@dnd-kit/sortable';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
+import { generatePlaceholderCard } from '~/utils/formatter';
 import Column from './ListColumns/Column/Column';
 import Card from './ListColumns/Column/Listcards/Card/Card';
 
@@ -67,6 +68,10 @@ function BoardContent({ board }) {
         // Delete card in active column
         nextActiveColumn.cards = nextActiveColumn.cards.filter((card) => card._id !== activeDraggingCardId);
 
+        // Add PlaceholderCard if Column is empty
+        if (isEmpty(nextActiveColumn.cards)) {
+          nextActiveColumn.cards = [generatePlaceholderCard(nextActiveColumn)];
+        }
         // Update cardOrderIds array
         nextActiveColumn.cardOrderIds = nextActiveColumn.cards.map((card) => card._id);
       }
@@ -83,6 +88,9 @@ function BoardContent({ board }) {
 
         // Next step, add dragging card to overColumn into new index position
         nextOverColumn.cards = nextOverColumn.cards.toSpliced(newCardIndex, 0, rebuild_activeDraggingCardData);
+
+        // Delete Placeholder Card if it's exsisting
+        nextOverColumn.cards = nextOverColumn.cards.filter((card) => !card.FE_PlaceholderCard);
 
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map((card) => card._id);
       }
