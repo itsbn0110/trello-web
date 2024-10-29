@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import ListColumns from './ListColumns/ListColumns';
-import { DndContext, useSensor, useSensors, MouseSensor, TouchSensor, DragOverlay, defaultDropAnimationSideEffects, closestCorners, pointerWithin, rectIntersection, getFirstCollision, closestCenter } from '@dnd-kit/core';
+import { DndContext, useSensor, useSensors, MouseSensor, TouchSensor, DragOverlay, defaultDropAnimationSideEffects, closestCorners, pointerWithin, getFirstCollision } from '@dnd-kit/core';
 import { mapOrder } from '~/utils/sorts';
 import { arrayMove } from '@dnd-kit/sortable';
-import { cloneDeep, last } from 'lodash';
+import { cloneDeep } from 'lodash';
 import Column from './ListColumns/Column/Column';
 import Card from './ListColumns/Column/Listcards/Card/Card';
-import { SettingsOverscanSharp } from '@mui/icons-material';
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
@@ -228,22 +227,23 @@ function BoardContent({ board }) {
 
       //Find intersections and collisions with the cursor - intersections with the cursor
       const pointerIntersections = pointerWithin(args);
+
+      if (!pointerIntersections) return;
       // Algorithm returns an collision array (collisions)
-      const intersections = !!pointerIntersections?.length ? pointerIntersections : rectIntersection(args);
 
       // Find the first overId in above Intersections
-      let overId = getFirstCollision(intersections, 'id');
+      let overId = getFirstCollision(pointerIntersections, 'id');
 
       if (overId) {
         const checkColumn = orderedColumns.find((column) => column._id === overId);
 
         if (checkColumn) {
-          overId = closestCenter({
+          overId = closestCorners({
             ...args,
             droppableContainers: args.droppableContainers.filter((container) => container.id !== overId && checkColumn?.cardOrderIds?.includes(container.id))
           })[0]?.id;
         }
-        // If over is a column, it will find the closest cardId within the collision area. Based on the math algorithm, the closestCenter or closestCorner collision is fine. However, using closestCenter here is smoother
+        // If over is a column, it will find the closest cardId within the collision area. Based on the math algorithm, the closestCenter or closestCorner collision is fine. However, using closestCorners here is smoother
         lastOverId.current = overId;
         return [{ id: overId }];
       }
