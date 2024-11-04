@@ -1,5 +1,6 @@
 import Box from '@mui/material/Box';
 import Card from './Card/Card';
+import { toast } from 'react-toastify';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 function ListCards({ cards }) {
@@ -8,7 +9,7 @@ function ListCards({ cards }) {
       <Box
         sx={{
           m: '0 5px',
-          p: '0 5px',
+          p: '0 5px 5px 5px',
           display: 'flex',
           flexDirection: 'column',
           gap: 1,

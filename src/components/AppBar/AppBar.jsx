@@ -73,7 +73,11 @@ function AppBar() {
                 <SearchIcon sx={{ color: 'white' }} />
               </InputAdornment>
             ),
-            endAdornment: searchValue && <CloseIcon sx={{ color: 'white', cursor: 'pointer' }} fontSize="small" onClick={() => setSearchValue('')} />
+            endAdornment: searchValue && (
+              <InputAdornment position="end">
+                <CloseIcon sx={{ color: 'white', cursor: 'pointer' }} fontSize="small" onClick={() => setSearchValue('')} />
+              </InputAdornment>
+            )
           }}
           sx={{
             minWidth: '120px',
@@ -84,7 +88,7 @@ function AppBar() {
             '& .MuiOutlinedInput-root': {
               '& fieldset': { borderColor: 'white' },
               '&:hover fieldset': { borderColor: 'white' },
-              '&.Mui-focused fieldset': { borderColor: 'white' }
+              '&.Mui-focused fieldset': { borderColor: 'white', transform: 'scale(1.05) !important' }
             }
           }}
         />

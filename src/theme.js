@@ -72,8 +72,8 @@ const theme = extendTheme({
             transform: 'scale(1.05)', // Tạo cảm giác phóng to nhẹ
             borderWidth: '1px !important'
           },
+          // focus sẽ không có transform scale chung, phải custom trong từng input muốn scale
           '&.Mui-focused fieldset': {
-            transform: 'scale(1.05)',
             borderWidth: '1px !important'
           }
         }
