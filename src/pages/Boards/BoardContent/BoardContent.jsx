@@ -15,7 +15,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 };
 
-function BoardContent({ board, createNewColumn, createNewCard }) {
+function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
   // https://docs.dndkit.com/api-documentation/sensors
   // If only use PointerSenSor by default, have to combine with CSS attributes : 'touch-action: none' on DnD elements. But the bug still exists
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } });
@@ -202,8 +202,10 @@ function BoardContent({ board, createNewColumn, createNewCard }) {
         const dndOrderedColumns = arrayMove(orderedColumns, oldColumnIndex, newColumnIndex);
         // 2 console.log data will be use to hanlde API
         // console.log('dndOrderedColumns', dndOrderedColumns);
-        // const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id);
         // console.log('dndOrderedColumnsIds', dndOrderedColumnsIds);
+
+        // Vẫn gọi update State ở đây để tránh delay trong quá trình call API, hoặc là Flickering giao diện lúc kéo thả
+        moveColumns(dndOrderedColumns);
 
         // update state columns after drag and drop
         setOrderedColumns(dndOrderedColumns);

@@ -3,10 +3,11 @@ import Container from '@mui/material/Container';
 import AppBar from '~/components/AppBar/AppBar';
 import BoardBar from './BoardBar/BoardBar';
 import BoardContent from './BoardContent/BoardContent';
-import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI } from '~/apis';
+import { fetchBoardDetailsAPI, createNewColumnAPI, createNewCardAPI, updateBoardDetailsAPI } from '~/apis';
 // import { mockData } from '~/apis/MockData';
 import { generatePlaceholderCard } from '~/utils/formatter';
-import { isEmpty } from 'lodash';
+import { isEmpty, update } from 'lodash';
+import { MoveUpRounded } from '@mui/icons-material';
 function Board() {
   const [board, setBoard] = useState(null);
 
@@ -55,14 +56,27 @@ function Board() {
       columnToUpdate.cards.push(createdCard);
       columnToUpdate.cardOrderIds.push(createdCard._id);
     }
+    // Cập nhật state board
     setBoard(newBoard);
   };
-  // Cập nhật state board
+
+  // Func này gọi Api khi kéo thả column xong xuôi
+  const moveColumns = async (dndOrderedColumns) => {
+    const dndOrderedColumnsIds = dndOrderedColumns.map((c) => c._id);
+    const newBoard = { ...board };
+    newBoard.columns = dndOrderedColumns;
+    newBoard.columnOrderIds = dndOrderedColumnsIds;
+    setBoard(newBoard);
+
+    // Gọi Api Update Board
+    await updateBoardDetailsAPI(newBoard._id, { columnOrderIds: dndOrderedColumnsIds });
+  };
+
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
       <AppBar />
       <BoardBar board={board} />
-      <BoardContent board={board} createNewColumn={createNewColumn} createNewCard={createNewCard} />
+      <BoardContent board={board} createNewColumn={createNewColumn} createNewCard={createNewCard} moveColumns={moveColumns} />
     </Container>
   );
 }

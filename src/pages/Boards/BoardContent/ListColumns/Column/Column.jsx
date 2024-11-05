@@ -30,6 +30,7 @@ function Column({ column, createNewCard }) {
     id: column._id,
     data: { ...column }
   });
+
   const dndKitColumnStyles = {
     // For sensor default has PointerSensor
     // touchAction: 'none',
@@ -38,6 +39,7 @@ function Column({ column, createNewCard }) {
     height: '100%',
     opacity: isDragging ? 0.5 : undefined
   };
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -54,6 +56,7 @@ function Column({ column, createNewCard }) {
   const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm);
 
   const [newCardTitle, setNewCardTitle] = useState('');
+
   const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error('Please enter column title!', { position: 'bottom-right' });
@@ -64,9 +67,9 @@ function Column({ column, createNewCard }) {
       title: newCardTitle,
       columnId: column._id
     };
-
-    await createNewCard(newColumnData);
     // Gọi API ở đây:
+    await createNewCard(newColumnData);
+
     toggleOpenNewCardForm();
     setNewCardTitle('');
   };
