@@ -22,9 +22,10 @@ import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import { mapOrder } from '~/utils/sorts';
 import { useSortable } from '@dnd-kit/sortable';
+import { toast } from 'react-toastify';
+
 import { CSS } from '@dnd-kit/utilities';
-import theme from '~/theme';
-function Column({ column }) {
+function Column({ column, createNewCard }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: column._id,
     data: { ...column }
@@ -53,11 +54,19 @@ function Column({ column }) {
   const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm);
 
   const [newCardTitle, setNewCardTitle] = useState('');
-  const addNewCard = () => {
+  const addNewCard = async () => {
     if (!newCardTitle) {
-      // console.error('Please enter column title!');
+      toast.error('Please enter column title!', { position: 'bottom-right' });
       return;
     }
+    // Tạo dữ liệu Column để gọi API
+    const newColumnData = {
+      title: newCardTitle,
+      columnId: column._id
+    };
+
+    await createNewCard(newColumnData);
+    // Gọi API ở đây:
     toggleOpenNewCardForm();
     setNewCardTitle('');
   };

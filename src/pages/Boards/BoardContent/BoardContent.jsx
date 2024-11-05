@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import ListColumns from './ListColumns/ListColumns';
 import { DndContext, useSensor, useSensors, DragOverlay, defaultDropAnimationSideEffects, closestCorners, pointerWithin, getFirstCollision } from '@dnd-kit/core';
-import { MouseSensor, TouchSensor } from '~/customLibraries/DnDKitSenSor';
+import { MouseSensor, TouchSensor } from '~/customLibraries/DndKitSensor';
 import { mapOrder } from '~/utils/sorts';
 import { arrayMove } from '@dnd-kit/sortable';
 import { cloneDeep, isEmpty } from 'lodash';
@@ -15,7 +15,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 };
 
-function BoardContent({ board }) {
+function BoardContent({ board, createNewColumn, createNewCard }) {
   // https://docs.dndkit.com/api-documentation/sensors
   // If only use PointerSenSor by default, have to combine with CSS attributes : 'touch-action: none' on DnD elements. But the bug still exists
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } });
@@ -283,7 +283,7 @@ function BoardContent({ board }) {
           p: '10px 0'
         }}
       >
-        <ListColumns columns={orderedColumns} />
+        <ListColumns columns={orderedColumns} createNewColumn={createNewColumn} createNewCard={createNewCard} />
         <DragOverlay dropAnimation={dropAnimation}>
           {!activeDragItem.type && null}
           {activeDragItem.type === ACTIVE_DRAG_ITEM_TYPE.COLUMN && <Column column={activeDragItem.data} />}
