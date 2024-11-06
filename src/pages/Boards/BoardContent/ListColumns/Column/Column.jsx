@@ -218,7 +218,10 @@ function Column({ column, createNewCard }) {
                 }}
                 sx={{
                   '& label': { color: 'text.primary' },
-                  '& input': { color: (theme) => theme.palette.primary.main, bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#333643' : 'white') },
+                  '& input': {
+                    color: (theme) => theme.palette.primary.main,
+                    bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#333643' : 'white')
+                  },
                   '& label.Mui-focused': { color: (theme) => theme.palette.primary.main },
                   '& .MuiOutlinedInput-root': {
                     '& fieldset': { borderColor: (theme) => theme.palette.primary.main },
