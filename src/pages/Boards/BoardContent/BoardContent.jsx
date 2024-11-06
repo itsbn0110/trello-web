@@ -1,9 +1,17 @@
 import { useCallback, useEffect, useState, useRef } from 'react';
 import Box from '@mui/material/Box';
 import ListColumns from './ListColumns/ListColumns';
-import { DndContext, useSensor, useSensors, DragOverlay, defaultDropAnimationSideEffects, closestCorners, pointerWithin, getFirstCollision } from '@dnd-kit/core';
+import {
+  DndContext,
+  useSensor,
+  useSensors,
+  DragOverlay,
+  defaultDropAnimationSideEffects,
+  closestCorners,
+  pointerWithin,
+  getFirstCollision
+} from '@dnd-kit/core';
 import { MouseSensor, TouchSensor } from '~/customLibraries/DndKitSensor';
-import { mapOrder } from '~/utils/sorts';
 import { arrayMove } from '@dnd-kit/sortable';
 import { cloneDeep, isEmpty } from 'lodash';
 import { generatePlaceholderCard } from '~/utils/formatter';
@@ -15,14 +23,25 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 };
 
-function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
+function BoardContent({
+  board,
+  createNewColumn,
+  createNewCard,
+  moveColumns,
+  moveCardInTheSameColumn,
+  moveCardToDifferentColumn
+}) {
   // https://docs.dndkit.com/api-documentation/sensors
   // If only use PointerSenSor by default, have to combine with CSS attributes : 'touch-action: none' on DnD elements. But the bug still exists
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } });
   // require mouse move 10px to trigger event, fix the case of being call event when click
-  const mouseSensor = useSensor(MouseSensor, { activationConstraint: { distance: 10 } });
+  const mouseSensor = useSensor(MouseSensor, {
+    activationConstraint: { distance: 10 }
+  });
   // Press and hold for 250ms  will trigger the event
-  const touchSensor = useSensor(TouchSensor, { activationConstraint: { delay: 500, tolerance: 5 } });
+  const touchSensor = useSensor(TouchSensor, {
+    activationConstraint: { delay: 500, tolerance: 5 }
+  });
 
   // Should use mouse sensors and touch sensors to have the best experience on mobile
 
@@ -43,19 +62,30 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
   const lastOverId = useRef(null);
 
   useEffect(() => {
-    setOrderedColumns(mapOrder(board?.columns, board?.columnOrderIds, '_id'));
+    // Column đã được sắp xếp ở component cha cao nhất
+    setOrderedColumns(board.columns);
   }, [board]);
 
   const findColumnByCardId = (cardId) => {
     return orderedColumns.find((column) => column.cards.map((card) => card._id)?.includes(cardId));
   };
 
-  const moveCardBetweenDifferentColumns = (overColumn, overCardId, active, over, activeColumn, activeDraggingCardId, activeDraggingCardData) => {
+  const moveCardBetweenDifferentColumns = (
+    overColumn,
+    overCardId,
+    active,
+    over,
+    activeColumn,
+    activeDraggingCardId,
+    activeDraggingCardData,
+    triggerFrom
+  ) => {
     setOrderedColumns((prevColumns) => {
       const overCardIndex = overColumn?.cards?.findIndex((card) => card._id === overCardId);
 
       let newCardIndex;
-      const isBelowOverItem = active.rect.current.translated && active.rect.current.translated.top > over.rect.top + over.rect.height;
+      const isBelowOverItem =
+        active.rect.current.translated && active.rect.current.translated.top > over.rect.top + over.rect.height;
 
       const modifier = isBelowOverItem ? 1 : 0;
 
@@ -95,6 +125,17 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
 
         nextOverColumn.cardOrderIds = nextOverColumn.cards.map((card) => card._id);
       }
+
+      // Nếu func này được gọi từ handleDragEnd nghĩa là đã kéo thả xong, lúc này mới gọi API xử lí 1 lần ở đây
+      if (triggerFrom === 'handleDragEnd') {
+        /**
+         * Phải dùng tới activeDragItemData.columnId hoặc tốt nhất là oldColumnWhenDraggingCard._id (set vào state
+         * từ bước handleDragStart) chứ không phải activeData trong scope handleDragEnd này vì sau khi đi qua onDragOver
+         * và tới đây là state của card đã bị cập nhật 1 lần rồi
+         */
+        moveCardToDifferentColumn(activeDraggingCardId, oldColumnWhenDraggingCard._id, nextOverColumn._id, nextColumns);
+      }
+
       return nextColumns;
     });
   };
@@ -143,7 +184,16 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
       // This is a handler when (handleDragOVer),
       // and handling when completely drag is another problem in (handleDragEnd)
       if (activeColumn._id !== overColumn._id) {
-        moveCardBetweenDifferentColumns(overColumn, overCardId, active, over, activeColumn, activeDraggingCardId, activeDraggingCardData);
+        moveCardBetweenDifferentColumns(
+          overColumn,
+          overCardId,
+          active,
+          over,
+          activeColumn,
+          activeDraggingCardId,
+          activeDraggingCardData,
+          'handleDragOver'
+        );
       }
     }
   };
@@ -170,15 +220,25 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
       // if not exsists 1 in 2 columns, do nothing, avoid crashing web
       if (!activeColumn || !overColumn) return;
 
-      // Drag card between 2 columns
+      // Drag card between 2 different columns
 
       if (oldColumnWhenDraggingCard._id !== overColumn._id) {
-        moveCardBetweenDifferentColumns(overColumn, overCardId, active, over, activeColumn, activeDraggingCardId, activeDraggingCardData);
+        moveCardBetweenDifferentColumns(
+          overColumn,
+          overCardId,
+          active,
+          over,
+          activeColumn,
+          activeDraggingCardId,
+          activeDraggingCardData,
+          'handleDragEnd'
+        );
       } else {
         // Dragging card in a column
         const oldCardIndex = oldColumnWhenDraggingCard?.cards.findIndex((c) => c._id === activeDragItem.id);
         const newCardIndex = overColumn?.cards?.findIndex((c) => c._id === overCardId);
         const dndOrderedCards = arrayMove(oldColumnWhenDraggingCard?.cards, oldCardIndex, newCardIndex);
+        const dndOrderedCardIds = dndOrderedCards.map((c) => c._id);
         setOrderedColumns((prevColumns) => {
           const nextColumns = cloneDeep(prevColumns);
 
@@ -189,6 +249,8 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
 
           return nextColumns;
         });
+
+        moveCardInTheSameColumn(dndOrderedCards, dndOrderedCardIds, oldColumnWhenDraggingCard._id);
       }
     }
 
@@ -204,21 +266,22 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
         // console.log('dndOrderedColumns', dndOrderedColumns);
         // console.log('dndOrderedColumnsIds', dndOrderedColumnsIds);
 
-        // Vẫn gọi update State ở đây để tránh delay trong quá trình call API, hoặc là Flickering giao diện lúc kéo thả
-        moveColumns(dndOrderedColumns);
-
         // update state columns after drag and drop
         setOrderedColumns(dndOrderedColumns);
 
+        // Vẫn gọi update State ở đây để tránh delay trong quá trình call API, hoặc là Flickering giao diện lúc kéo thả
+        moveColumns(dndOrderedColumns);
+
         // datas after drag and drop always return null value
-        setActiveDragItem({
-          id: null,
-          type: null,
-          data: null
-        });
-        setOldColumnWhenDraggingCard(null);
       }
     }
+
+    setActiveDragItem({
+      id: null,
+      type: null,
+      data: null
+    });
+    setOldColumnWhenDraggingCard(null);
   };
 
   // console.log('activeDragItemId', activeDragItemId);
@@ -227,7 +290,9 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
 
   // Animation when dropping an element - Test by dragging and dropping directly and looking at the overLay placeholder
   const dropAnimation = {
-    sideEffects: defaultDropAnimationSideEffects({ styles: { active: { opacity: '0.5' } } })
+    sideEffects: defaultDropAnimationSideEffects({
+      styles: { active: { opacity: '0.5' } }
+    })
   };
 
   const collisionDetectionStrategy = useCallback(
@@ -251,7 +316,9 @@ function BoardContent({ board, createNewColumn, createNewCard, moveColumns }) {
         if (checkColumn) {
           overId = closestCorners({
             ...args,
-            droppableContainers: args.droppableContainers.filter((container) => container.id !== overId && checkColumn?.cardOrderIds?.includes(container.id))
+            droppableContainers: args.droppableContainers.filter(
+              (container) => container.id !== overId && checkColumn?.cardOrderIds?.includes(container.id)
+            )
           })[0]?.id;
         }
         // If over is a column, it will find the closest cardId within the collision area. Based on the math algorithm, the closestCenter or closestCorner collision is fine. However, using closestCorners here is smoother
