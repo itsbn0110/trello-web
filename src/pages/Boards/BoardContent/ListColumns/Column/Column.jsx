@@ -20,7 +20,6 @@ import ListCards from './Listcards/Listcards';
 
 import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
-import { mapOrder } from '~/utils/sorts';
 import { useSortable } from '@dnd-kit/sortable';
 import { toast } from 'react-toastify';
 
@@ -50,14 +49,14 @@ function Column({ column, createNewCard }) {
     setAnchorEl(null);
   };
 
-  const orderedCard = mapOrder(column?.cards, column?.cardOrderIds, '_id');
+  const orderedCard = column.cards;
 
   const [openNewCardForm, setOpenNewCardForm] = useState(false);
   const toggleOpenNewCardForm = () => setOpenNewCardForm(!openNewCardForm);
 
   const [newCardTitle, setNewCardTitle] = useState('');
 
-  const addNewCard = async () => {
+  const addNewCard = () => {
     if (!newCardTitle) {
       toast.error('Please enter column title!', { position: 'bottom-right' });
       return;
@@ -68,7 +67,7 @@ function Column({ column, createNewCard }) {
       columnId: column._id
     };
     // Gọi API ở đây:
-    await createNewCard(newColumnData);
+    createNewCard(newColumnData);
 
     toggleOpenNewCardForm();
     setNewCardTitle('');
