@@ -250,7 +250,7 @@ function Column({ column, createNewCard, detleteColumnDetails }) {
             >
               <TextField
                 id="outlined-search"
-                label="Enter column title..."
+                label="Enter card title..."
                 type="text"
                 size="small"
                 variant="outlined"

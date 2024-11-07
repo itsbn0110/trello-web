@@ -42,14 +42,25 @@ function BoardBar({ board }) {
         }
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 2,
+          overflow: 'auto',
+          '&::-webkit-scrollbar-track': {
+            m: 2
+          }
+        }}
+      >
         <Tooltip title={board?.description}>
           <Chip icon={<DashboardIcon />} label={board?.title} sx={CHIP_STYLES} clickable />
-          <Chip icon={<VpnLockIcon />} label={capitalizeFirstLetter(board?.type)} sx={CHIP_STYLES} clickable />
-          <Chip icon={<AddToDriveIcon />} label="Add to Google Drive" sx={CHIP_STYLES} clickable />
-          <Chip icon={<BoltIcon />} label="Automation" sx={CHIP_STYLES} clickable />
-          <Chip icon={<FilterListIcon />} label="Filters" sx={CHIP_STYLES} clickable />
         </Tooltip>
+        <Chip icon={<VpnLockIcon />} label={capitalizeFirstLetter(board?.type)} sx={CHIP_STYLES} clickable />
+        <Chip icon={<AddToDriveIcon />} label="Add to Google Drive" sx={CHIP_STYLES} clickable />
+        <Chip icon={<BoltIcon />} label="Automation" sx={CHIP_STYLES} clickable />
+        <Chip icon={<FilterListIcon />} label="Filters" sx={CHIP_STYLES} clickable />
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
@@ -90,19 +101,34 @@ function BoardBar({ board }) {
             <Avatar alt="BaoNgo" src="https://avatars.githubusercontent.com/u/181921020?v=4" />
           </Tooltip>
           <Tooltip title="Rose">
-            <Avatar alt="Rose" src="https://i.pinimg.com/enabled_hi/564x/f6/cb/78/f6cb78a2affe7954a5c699313a382278.jpg" />
+            <Avatar
+              alt="Rose"
+              src="https://i.pinimg.com/enabled_hi/564x/f6/cb/78/f6cb78a2affe7954a5c699313a382278.jpg"
+            />
           </Tooltip>
           <Tooltip title="Zhāng Ruò Nán / 章若楠">
-            <Avatar alt="Zhāng Ruò Nán / 章若楠" src="https://i.pinimg.com/564x/a7/67/47/a767478c979c6274c1de6dab0066606d.jpg" />
+            <Avatar
+              alt="Zhāng Ruò Nán / 章若楠"
+              src="https://i.pinimg.com/564x/a7/67/47/a767478c979c6274c1de6dab0066606d.jpg"
+            />
           </Tooltip>
           <Tooltip title="Zhāng Ruò Nán / 章若楠">
-            <Avatar alt="Zhāng Ruò Nán / 章若楠" src="https://i.pinimg.com/736x/65/fe/29/65fe29d7c661a92f5c716b7f234444cd.jpg" />
+            <Avatar
+              alt="Zhāng Ruò Nán / 章若楠"
+              src="https://i.pinimg.com/736x/65/fe/29/65fe29d7c661a92f5c716b7f234444cd.jpg"
+            />
           </Tooltip>
           <Tooltip title="Zhāng Ruò Nán / 章若楠">
-            <Avatar alt="Zhāng Ruò Nán / 章若楠" src="https://i.pinimg.com/736x/9c/b2/11/9cb211670c950870669fd722479a1e35.jpg" />
+            <Avatar
+              alt="Zhāng Ruò Nán / 章若楠"
+              src="https://i.pinimg.com/736x/9c/b2/11/9cb211670c950870669fd722479a1e35.jpg"
+            />
           </Tooltip>
           <Tooltip title="Zhāng Ruò Nán / 章若楠">
-            <Avatar alt="Zhāng Ruò Nán / 章若楠" src="https://i.pinimg.com/564x/73/88/64/73886422a42cb76fa30822d632ef4b15.jpg" />
+            <Avatar
+              alt="Zhāng Ruò Nán / 章若楠"
+              src="https://i.pinimg.com/564x/73/88/64/73886422a42cb76fa30822d632ef4b15.jpg"
+            />
           </Tooltip>
           <Tooltip title="HoaXu">
             <Avatar
@@ -114,19 +140,34 @@ function BoardBar({ board }) {
             <Avatar alt="BaoNgo" src="https://avatars.githubusercontent.com/u/181921020?v=4" />
           </Tooltip>
           <Tooltip title="Rose">
-            <Avatar alt="Rose" src="https://i.pinimg.com/enabled_hi/564x/f6/cb/78/f6cb78a2affe7954a5c699313a382278.jpg" />
+            <Avatar
+              alt="Rose"
+              src="https://i.pinimg.com/enabled_hi/564x/f6/cb/78/f6cb78a2affe7954a5c699313a382278.jpg"
+            />
           </Tooltip>
           <Tooltip title="Zhāng Ruò Nán / 章若楠">
-            <Avatar alt="Zhāng Ruò Nán / 章若楠" src="https://i.pinimg.com/564x/a7/67/47/a767478c979c6274c1de6dab0066606d.jpg" />
+            <Avatar
+              alt="Zhāng Ruò Nán / 章若楠"
+              src="https://i.pinimg.com/564x/a7/67/47/a767478c979c6274c1de6dab0066606d.jpg"
+            />
           </Tooltip>
           <Tooltip title="Zhāng Ruò Nán / 章若楠">
-            <Avatar alt="Zhāng Ruò Nán / 章若楠" src="https://i.pinimg.com/736x/65/fe/29/65fe29d7c661a92f5c716b7f234444cd.jpg" />
+            <Avatar
+              alt="Zhāng Ruò Nán / 章若楠"
+              src="https://i.pinimg.com/736x/65/fe/29/65fe29d7c661a92f5c716b7f234444cd.jpg"
+            />
           </Tooltip>
           <Tooltip title="Zhāng Ruò Nán / 章若楠">
-            <Avatar alt="Zhāng Ruò Nán / 章若楠" src="https://i.pinimg.com/736x/9c/b2/11/9cb211670c950870669fd722479a1e35.jpg" />
+            <Avatar
+              alt="Zhāng Ruò Nán / 章若楠"
+              src="https://i.pinimg.com/736x/9c/b2/11/9cb211670c950870669fd722479a1e35.jpg"
+            />
           </Tooltip>
           <Tooltip title="Zhāng Ruò Nán / 章若楠">
-            <Avatar alt="Zhāng Ruò Nán / 章若楠" src="https://i.pinimg.com/564x/73/88/64/73886422a42cb76fa30822d632ef4b15.jpg" />
+            <Avatar
+              alt="Zhāng Ruò Nán / 章若楠"
+              src="https://i.pinimg.com/564x/73/88/64/73886422a42cb76fa30822d632ef4b15.jpg"
+            />
           </Tooltip>
         </AvatarGroup>
       </Box>
