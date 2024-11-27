@@ -23,15 +23,7 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 };
 
-function BoardContent({
-  board,
-  createNewColumn,
-  createNewCard,
-  moveColumns,
-  moveCardInTheSameColumn,
-  moveCardToDifferentColumn,
-  detleteColumnDetails
-}) {
+function BoardContent({ board, moveColumns, moveCardInTheSameColumn, moveCardToDifferentColumn }) {
   // https://docs.dndkit.com/api-documentation/sensors
   // If only use PointerSenSor by default, have to combine with CSS attributes : 'touch-action: none' on DnD elements. But the bug still exists
   // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } });
@@ -353,12 +345,7 @@ function BoardContent({
           p: '10px 0'
         }}
       >
-        <ListColumns
-          columns={orderedColumns}
-          createNewColumn={createNewColumn}
-          createNewCard={createNewCard}
-          detleteColumnDetails={detleteColumnDetails}
-        />
+        <ListColumns columns={orderedColumns} />
         <DragOverlay dropAnimation={dropAnimation}>
           {!activeDragItem.type && null}
           {activeDragItem.type === ACTIVE_DRAG_ITEM_TYPE.COLUMN && <Column column={activeDragItem.data} />}
