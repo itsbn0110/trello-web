@@ -7,15 +7,8 @@ import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import Typography from '@mui/material/Typography';
-import {
-  createNewCardAPI,
-  updateBoardDetailsAPI,
-  updateColumnDetailsAPI,
-  moveCardToDifferentColumnAPI,
-  deleteColumnDetailsAPI
-} from '~/apis';
+import { updateBoardDetailsAPI, updateColumnDetailsAPI, moveCardToDifferentColumnAPI } from '~/apis';
 // import { mockData } from '~/apis/MockData';
-import { toast } from 'react-toastify';
 import { cloneDeep } from 'lodash';
 import {
   fetchBoardDetailsAPI,
@@ -23,17 +16,20 @@ import {
   selectCurrentActiveBoard
 } from '~/redux/activeBoard/activeBoardSlice';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { useParams } from 'react-router-dom';
+
 function Board() {
   const dispatch = useDispatch();
   // Không dùng state của components nữa mà chuyển qua sử dụng state của redux
   // const [board, setBoard] = useState(null);
   const board = useSelector(selectCurrentActiveBoard);
+
+  const { boardId } = useParams();
+
   useEffect(() => {
-    //  Tạm thời fix cứng boardId
-    const boardId = '672b1ed01b5582d5310145a2';
-    // call API
     dispatch(fetchBoardDetailsAPI(boardId));
-  }, [dispatch]);
+  }, [dispatch, boardId]);
 
   // Func này gọi Api khi kéo thả column xong xuôi
   const moveColumns = (dndOrderedColumns) => {
