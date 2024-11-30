@@ -1,5 +1,5 @@
 // TrungQuanDev: https://youtube.com/@trungquandev
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
@@ -10,7 +10,9 @@ import { ReactComponent as TrelloIcon } from '~/assets/trello.svg';
 import CardActions from '@mui/material/CardActions';
 import TextField from '@mui/material/TextField';
 import Zoom from '@mui/material/Zoom';
+import { toast } from 'react-toastify';
 import { useForm } from 'react-hook-form';
+import { registerUserAPI } from '~/apis';
 import {
   EMAIL_RULE,
   EMAIL_RULE_MESSAGE,
@@ -29,8 +31,12 @@ function RegisterForm() {
     watch
   } = useForm();
 
+  const navigate = useNavigate();
   const submitRegister = (data) => {
-    console.log('submit register: ', data);
+    const { email, password } = data;
+    toast.promise(registerUserAPI({ email, password }), { pending: 'Registration is in progress...' }).then((user) => {
+      navigate(`/login?registeredEmail=${user.email}`);
+    });
   };
   return (
     <form onSubmit={handleSubmit(submitRegister)}>
