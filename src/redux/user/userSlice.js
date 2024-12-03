@@ -26,6 +26,11 @@ export const logoutUserAPI = createAsyncThunk('user/logoutUserAPI', async (showS
   return response.data;
 });
 
+export const updateUserAPI = createAsyncThunk('user/updateUserAPI', async (data) => {
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/users/update`, data);
+  return response.data;
+});
+
 // Khởi tạo 1 slice trong kho lưu trữ
 export const userSlice = createSlice({
   name: 'user',
@@ -46,6 +51,15 @@ export const userSlice = createSlice({
        * Kết hợp ProtectedRoute đã làm ở App.js => code sẽ điều hướng chuẩn về trang Login
        */
       state.currentUser = null;
+    });
+
+    builder.addCase(updateUserAPI.fulfilled, (state, action) => {
+      /**
+       * API logout sau khi gọi thành công thì sẽ clear thông tin currentUser về null ở đây
+       * Kết hợp ProtectedRoute đã làm ở App.js => code sẽ điều hướng chuẩn về trang Login
+       */
+      const user = action.payload;
+      state.currentUser = user;
     });
   }
 });
