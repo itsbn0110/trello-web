@@ -2,6 +2,7 @@ import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/s
 import { createRoot } from 'react-dom/client';
 import App from '~/App.jsx';
 import { CssBaseline } from '@mui/material';
+import GlobalStyles from '@mui/material/GlobalStyles';
 import theme from '~/theme.js';
 
 // Cấu hình react-toastify
@@ -40,6 +41,7 @@ createRoot(document.getElementById('root')).render(
               confirmationButtonProps: { color: 'secondary', variant: 'outlined' }
             }}
           >
+            <GlobalStyles styles={{ a: { textDecoration: 'none' } }} />
             <CssBaseline />
             <App />
             <ToastContainer theme="colored" />

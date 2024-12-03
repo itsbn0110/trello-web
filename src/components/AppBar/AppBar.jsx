@@ -20,6 +20,8 @@ import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseIcon from '@mui/icons-material/Close';
+import { Link } from 'react-router-dom';
+
 function AppBar() {
   const [searchValue, setSearchValue] = useState('');
   return (
@@ -41,18 +43,24 @@ function AppBar() {
     >
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
         <AppsIcon sx={{ color: 'white' }} />
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 0.5 }}>
-          <SvgIcon component={TrelloIcon} inheritViewBox sx={{ color: 'white' }} />
-          <Typography variant="span" sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white' }}>
-            Trello
-          </Typography>
-        </Box>
+        <Link to="/">
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 0.5 }}>
+            <SvgIcon component={TrelloIcon} inheritViewBox sx={{ color: 'white' }} />
+            <Typography variant="span" sx={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'white' }}>
+              Trello
+            </Typography>
+          </Box>
+        </Link>
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           <WorkSpaces />
           <Recent />
           <Starred />
           <Templates />
-          <Button variant="outlined" startIcon={<LibraryAddIcon />} sx={{ color: 'white', border: 'none', '&:hover': { border: 'none' } }}>
+          <Button
+            variant="outlined"
+            startIcon={<LibraryAddIcon />}
+            sx={{ color: 'white', border: 'none', '&:hover': { border: 'none' } }}
+          >
             Create
           </Button>
         </Box>
@@ -75,7 +83,11 @@ function AppBar() {
             ),
             endAdornment: searchValue && (
               <InputAdornment position="end">
-                <CloseIcon sx={{ color: 'white', cursor: 'pointer' }} fontSize="small" onClick={() => setSearchValue('')} />
+                <CloseIcon
+                  sx={{ color: 'white', cursor: 'pointer' }}
+                  fontSize="small"
+                  onClick={() => setSearchValue('')}
+                />
               </InputAdornment>
             )
           }}
