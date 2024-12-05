@@ -37,7 +37,7 @@ function App() {
       nằm trong history của Browser
       // Thực hành dễ hiểu hơn bằng cách nhấn Go Home từ trang 404 xong thử quay lại bằng nút back của trình duyệt giữa 2 trường hợp
       có replace hoặc không có */}
-      <Route path="/" element={<Navigate to="/boards/672b1ed01b5582d5310145a2" replace={true} />} />
+      <Route path="/" element={<Navigate to="/boards" replace={true} />} />
 
       {/* ProtectedRoute sẽ bọc những route chỉ cho truy cập sau khi đã login */}
       <Route element={<ProtectedRoute user={currentUser} />}>

@@ -7,6 +7,11 @@ export const fetchBoardDetailsAPI = async (boardId) => {
   return response.data;
 };
 
+export const fetchBoardsAPI = async (searchPath) => {
+  const response = await authorizedAxiosInstance.get(`${API_ROOT}/v1/boards/${searchPath}`);
+  return response.data;
+};
+
 export const updateBoardDetailsAPI = async (boardId, updateData) => {
   const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/boards/${boardId}`, updateData);
   return response.data;
