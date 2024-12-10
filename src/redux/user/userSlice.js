@@ -22,7 +22,6 @@ export const logoutUserAPI = createAsyncThunk('user/logoutUserAPI', async (showS
   if (showSucceesMessage) {
     toast.success('Logged out successfully!');
   }
-  console.log(response);
   return response.data;
 });
 

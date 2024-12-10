@@ -1,4 +1,3 @@
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
@@ -17,20 +16,9 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectCurrentUser, updateUserAPI } from '~/redux/user/userSlice';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-
+import VisuallyHiddenInput from '~/components/Form/VisuallyHiddenInput';
 // Xử lý custom đẹp cái input file ở đây: https://mui.com/material-ui/react-button/#file-upload
 // Ngoài ra note thêm lib này từ docs của MUI nó recommend nếu cần dùng: https://github.com/viclafouch/mui-file-input
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1
-});
 
 function AccountTab() {
   const dispatch = useDispatch();
@@ -115,15 +103,15 @@ function AccountTab() {
       >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
           <Box>
-            <Avatar sx={{ width: 84, height: 84, mb: 1 }} alt="TrungQuanDev" src={currentUser?.avatar} />
+            <Avatar sx={{ width: 200, height: 200, mb: 3 }} alt="baongohehe" src={currentUser?.avatar} />
+          </Box>
+          <Box>
             <Tooltip title="Upload a new image to update your avatar immediately.">
               <Button component="label" variant="contained" size="small" startIcon={<CloudUploadIcon />}>
                 Upload
                 <VisuallyHiddenInput type="file" onChange={uploadAvatar} />
               </Button>
             </Tooltip>
-          </Box>
-          <Box>
             <Typography variant="h6">{currentUser?.displayName}</Typography>
             <Typography sx={{ color: 'grey' }}>@{currentUser?.username}</Typography>
           </Box>

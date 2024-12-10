@@ -16,13 +16,12 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { useParams } from 'react-router-dom';
 import PageLoadingSpinner from '~/components/Loading/PageLoadingSpinner';
-
+import ActiveCard from '~/components/Modal/ActiveCard/ActiveCard';
 function Board() {
   const dispatch = useDispatch();
   // Không dùng state của components nữa mà chuyển qua sử dụng state của redux
   // const [board, setBoard] = useState(null);
   const board = useSelector(selectCurrentActiveBoard);
-
   const { boardId } = useParams();
 
   useEffect(() => {
@@ -98,6 +97,10 @@ function Board() {
   }
   return (
     <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
+      {/* Modal Active Card, check đóng/mở dựa theo đk có tồn tại data activeCard lưu trong Redux
+      hay không thì mới render. Mỗi thời điểm chỉ tồn tại một cái Modal Card đang Active
+       */}
+      <ActiveCard />
       <AppBar />
       <BoardBar board={board} />
       <BoardContent

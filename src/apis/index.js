@@ -16,12 +16,17 @@ export const updateBoardDetailsAPI = async (boardId, updateData) => {
   const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/boards/${boardId}`, updateData);
   return response.data;
 };
+export const createNewBoardAPI = async (boardData) => {
+  const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/boards`, boardData);
+  toast.success('Board created successfully');
+  return response.data;
+};
 
+// Columns
 export const moveCardToDifferentColumnAPI = async (updateData) => {
   const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/boards/supports/moving_card`, updateData);
   return response.data;
 };
-// Columns
 export const createNewColumnAPI = async (newColumnData) => {
   const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/columns`, newColumnData);
   return response.data;
@@ -40,6 +45,11 @@ export const deleteColumnDetailsAPI = async (columnId) => {
 // Cards
 export const createNewCardAPI = async (newCardData) => {
   const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/cards`, newCardData);
+  return response.data;
+};
+
+export const updateCardDetailsAPI = async (cardId, updateData) => {
+  const response = await authorizedAxiosInstance.put(`${API_ROOT}/v1/cards/${cardId}`, updateData);
   return response.data;
 };
 
@@ -63,5 +73,11 @@ export const verifyUserAPI = async (data) => {
 
 export const refreshTokenAPI = async () => {
   const response = await authorizedAxiosInstance.get(`${API_ROOT}/v1/users/refresh_token`);
+  return response.data;
+};
+
+export const inviteUserBoardAPI = async (data) => {
+  const response = await authorizedAxiosInstance.post(`${API_ROOT}/v1/invitations/board`, data);
+  toast.success('User invited to board Successfully!');
   return response.data;
 };
