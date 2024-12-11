@@ -14,7 +14,7 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import DoneIcon from '@mui/icons-material/Done';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import { useSelector, useDispatch } from 'react-redux';
-import { socketIoInstance } from '~/main';
+import { socketIoInstance } from '~/socketClient';
 import {
   fetchInvitationsAPI, //
   selectCurrentNotifications,

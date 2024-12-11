@@ -57,7 +57,7 @@ export const activeBoardSlice = createSlice({
 
       // Thành viên trong board sẽ gộp lại của 2 mảng owners và members
 
-      board.FE_allUser = board.owners.concat(board.members);
+      board.FE_allUsers = board.owners.concat(board.members);
 
       board.columns = mapOrder(board.columns, board.columnOrderIds, '_id');
 
