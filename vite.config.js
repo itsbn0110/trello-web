@@ -10,5 +10,8 @@ export default defineConfig({
   plugins: [react(), svgr()],
   resolve: {
     alias: [{ find: '~', replacement: '/src' }]
+  },
+  server: {
+    historyApiFallback: true // Chuyển hướng các request không tìm thấy về index.html
   }
 });
