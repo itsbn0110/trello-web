@@ -23,6 +23,9 @@ import {
 } from '~/utils/validators';
 
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert';
+import GoogleIcon from '@mui/icons-material/Google';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
 function RegisterForm() {
   const {
     register,
@@ -41,7 +44,7 @@ function RegisterForm() {
   return (
     <form onSubmit={handleSubmit(submitRegister)}>
       <Zoom in={true} style={{ transitionDelay: '200ms' }}>
-        <MuiCard sx={{ minWidth: 380, maxWidth: 380, marginTop: '6em' }}>
+        <MuiCard sx={{ minWidth: 380, maxWidth: 380, marginTop: '6em',borderRadius:'8px'}}>
           <Box
             sx={{
               margin: '1em',
@@ -62,10 +65,11 @@ function RegisterForm() {
               marginTop: '1em',
               display: 'flex',
               justifyContent: 'center',
-              color: (theme) => theme.palette.grey[500]
+              fontSize:'1em',
+              fontWeight:'500'
             }}
           >
-            Register
+            Sign up to continue
           </Box>
           <Box sx={{ padding: '0 1em 1em 1em' }}>
             <Box sx={{ marginTop: '1em' }}>
@@ -133,7 +137,41 @@ function RegisterForm() {
               Register
             </Button>
           </CardActions>
-          <Box sx={{ padding: '0 1em 1em 1em', textAlign: 'center' }}>
+
+          <Typography
+            sx={{ textAlign: 'center', margin: '1em 0', color: 'gray',fontStyle:'italic'}}
+            variant="body2"
+          >
+            Or continue with
+          </Typography>
+
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2,padding:'0 16px'}}>
+            <Button
+              variant="outlined"
+              color="primary"
+              startIcon={<GoogleIcon />}
+              sx={{ textTransform: 'none' }}
+            >
+              Google
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              startIcon={<FacebookIcon />}
+              sx={{ textTransform: 'none' }}
+            >
+              Facebook
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              startIcon={<TwitterIcon />}
+              sx={{ textTransform: 'none' }}
+            >
+              Twitter
+            </Button>
+          </Box>
+          <Box sx={{ padding: '0 1em 1em 1em', textAlign: 'center',marginTop:'2em' }}>
             <Typography>Already have an account?</Typography>
             <Link to="/login" style={{ textDecoration: 'none' }}>
               <Typography sx={{ color: 'primary.main', '&:hover': { color: '#ffbb39' } }}>Log in!</Typography>

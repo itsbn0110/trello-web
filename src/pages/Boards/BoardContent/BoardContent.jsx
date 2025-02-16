@@ -140,7 +140,6 @@ function BoardContent({ board, moveColumns, moveCardInTheSameColumn, moveCardToD
       type: itemType,
       data: event?.active?.data?.current
     });
-
     // If dragging card, conduct action setting oldColumn value
     if (event?.active?.data?.current?.columnId) {
       setOldColumnWhenDraggingCard(findColumnByCardId(event?.active?.id));

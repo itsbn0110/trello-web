@@ -1,4 +1,4 @@
-// TrungQuanDev: https://youtube.com/@trungquandev
+
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -22,7 +22,9 @@ import {
   PASSWORD_RULE_MESSAGE
   // PASSWORD_CONFIRMATION_MESSAGE
 } from '~/utils/validators';
-
+import GoogleIcon from '@mui/icons-material/Google';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import TwitterIcon from '@mui/icons-material/Twitter';
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert';
 import { useDispatch } from 'react-redux';
 function LoginForm() {
@@ -48,7 +50,7 @@ function LoginForm() {
   return (
     <form onSubmit={handleSubmit(submitLogIn)}>
       <Zoom in={true} style={{ transitionDelay: '200ms' }}>
-        <MuiCard sx={{ minWidth: 380, maxWidth: 380, marginTop: '6em' }}>
+        <MuiCard sx={{ minWidth: 380, maxWidth: 380, marginTop: '6em',borderRadius:'8px',boxShadow:'rgba(0, 0, 0, 0.1) 0px 0px 10px'}}>
           <Box
             sx={{
               margin: '1em',
@@ -69,10 +71,11 @@ function LoginForm() {
               marginTop: '1em',
               display: 'flex',
               justifyContent: 'center',
-              color: (theme) => theme.palette.grey[500]
+              fontSize:'1em',
+              fontWeight:'500'
             }}
           >
-            Login
+            Login to continue
           </Box>
           <Box
             sx={{
@@ -157,10 +160,43 @@ function LoginForm() {
               Login
             </Button>
           </CardActions>
-          <Box sx={{ padding: '0 1em 1em 1em', textAlign: 'center' }}>
-            <Typography>New to Trello MERN Stack Advanced?</Typography>
+          <Typography
+            sx={{ textAlign: 'center', margin: '1em 0', color: 'gray',fontStyle:'italic'}}
+            variant="body2"
+          >
+            Or log in with
+          </Typography>
+
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 ,padding:'0 16px'}}>
+            <Button
+              variant="outlined"
+              color="primary"
+              startIcon={<GoogleIcon />}
+              sx={{ textTransform: 'none' }}
+            >
+              Google
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              startIcon={<FacebookIcon />}
+              sx={{ textTransform: 'none' }}
+            >
+              Facebook
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              startIcon={<TwitterIcon />}
+              sx={{ textTransform: 'none' }}
+            >
+              Twitter
+            </Button>
+          </Box>
+          <Box sx={{ padding: '0 1em 1em 1em', textAlign: 'center', marginTop:'2em' }}>
+            <Typography>Can't log in?</Typography>
             <Link to="/register" style={{ textDecoration: 'none' }}>
-              <Typography sx={{ color: 'primary.main', '&:hover': { color: '#ffbb39' } }}>Create account!</Typography>
+              <Typography sx={{ color: 'primary.main', '&:hover': { color: '#ffbb39' } }}>Create an account!</Typography>
             </Link>
           </Box>
         </MuiCard>

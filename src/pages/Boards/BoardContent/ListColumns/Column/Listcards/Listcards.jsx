@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box';
 import Card from './Card/Card';
-import { toast } from 'react-toastify';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 function ListCards({ cards }) {

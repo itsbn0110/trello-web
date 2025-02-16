@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Box from '@mui/material/Box';
 import ModeSelect from '~/components/ModeSelect/ModeSelect';
 import AppsIcon from '@mui/icons-material/Apps';
@@ -18,7 +17,6 @@ import { Link } from 'react-router-dom';
 import Notifications from './Notifications/Notifications';
 import AutoCompleteSearchBoard from './SearchBoards/AutoCompleteSearchBoard';
 function AppBar() {
-  const [searchValue, setSearchValue] = useState('');
   return (
     <Box
       sx={{
